@@ -1,0 +1,45 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: myblog
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 数据库需先创建：blog（执行 resources/db/schema.sql）
+    url: jdbc:mysql://localhost:3306/blog?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+  # M3 启用 Redis（本地需安装 Redis，或 Docker 起一个）后取消注释
+  # data:
+  #   redis:
+  #     host: localhost
+  #     port: 6379
+
+# 自定义配置：图片上传目录（本地磁盘，配合 WebMvcConfig 的虚拟路径映射 /upload/**）
+blog:
+  upload-dir: ./upload
+
+mybatis-plus:
+  configuration:
+    # 数据库下划线字段自动映射为 Java 驼峰属性
+    map-underscore-to-camel-case: true
+    # 开发期打印 SQL 到控制台，便于学习调试；上线前建议移除
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      # 主键自增
+      id-type: auto
+      # 逻辑删除字段（PRD 附录 A 约定）
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  # 手写 SQL（全文检索等）放在 resources/mapper 下
+  mapper-locations: classpath*:mapper/*.xml
+
+# M1 认证：Sa-Token 配置（启用 sa-token-spring-boot4-starter 依赖后取消注释）
+# sa-token:
+#   token-name: Authorization      # 前端携带的请求头名称
+#   timeout: 604800                # token 有效期（秒），7 天
+#   is-concurrent: true            # 允许同一账号多地同时登录
+#   is-share: false                # 每次登录签发新 token
