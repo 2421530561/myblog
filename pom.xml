@@ -66,13 +66,13 @@
 		<!-- ============ 以下依赖按里程碑启用 ============ -->
 
 		<!-- M1 认证：Sa-Token（v1.45.0 起适配 Spring Boot 4；启用后同时启用 application.yml 中 sa-token 配置） -->
-		<!--
+		
 		<dependency>
 			<groupId>cn.dev33</groupId>
 			<artifactId>sa-token-spring-boot4-starter</artifactId>
 			<version>1.45.0</version>
 		</dependency>
-		-->
+	
 
 		<!-- M3 计数/缓存：Redis -->
 		<!--

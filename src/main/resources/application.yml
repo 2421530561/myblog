@@ -38,8 +38,8 @@ mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml
 
 # M1 认证：Sa-Token 配置（启用 sa-token-spring-boot4-starter 依赖后取消注释）
-# sa-token:
-#   token-name: Authorization      # 前端携带的请求头名称
-#   timeout: 604800                # token 有效期（秒），7 天
-#   is-concurrent: true            # 允许同一账号多地同时登录
-#   is-share: false                # 每次登录签发新 token
+sa-token:
+  token-name: Authorization      # 前端携带的请求头名称
+  timeout: 604800                # token 有效期（秒），7 天
+  is-concurrent: true            # 允许同一账号多地同时登录
+  is-share: false                # 每次登录签发新 token
