@@ -1,19 +1,50 @@
 package com.littlecase.myblog.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.stp.StpUtil;
+import com.littlecase.myblog.common.Result;
+import com.littlecase.myblog.dto.LoginDTO;
+import com.littlecase.myblog.dto.RegisterDTO;
+import com.littlecase.myblog.service.UserService;
+import com.littlecase.myblog.vo.UserVO;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
-/**
- * 认证接口（M1 里程碑实现）
- * <p>
- * 计划接口：
- * POST /api/auth/register  注册（username/email/password，密码 BCrypt 加密）
- * POST /api/auth/login     登录（校验密码，签发 JWT，返回 token + 用户信息）
- * POST /api/auth/logout    登出
- * GET  /api/auth/me        当前登录用户信息
- */
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
-    // TODO M1: 注册 / 登录 / 登出 / 当前用户
+
+    private final UserService userService;
+
+    @PostMapping("/register")
+    public Result<Void> register(@Valid @RequestBody RegisterDTO dto) {
+        userService.register(dto);
+        return Result.ok();
+    }
+
+    @PostMapping("/login")
+    public Result<Object> login(@Valid @RequestBody LoginDTO dto) {
+        UserVO userVO = userService.login(dto);
+        String tokens = StpUtil.getTokenValue();
+        return Result.ok(new Object() {
+            public final String token = tokens;
+            public final UserVO userInfo = userVO;
+        });
+    }
+
+    @PostMapping("/logout")
+    @SaCheckLogin
+    public Result<Void> logout() {
+        StpUtil.logout();
+        return Result.ok();
+    }
+
+    @GetMapping("/me")
+    @SaCheckLogin
+    public Result<UserVO> me() {
+        long userId = StpUtil.getLoginIdAsLong();
+        return Result.ok(userService.getCurrentUser(userId));
+    }
 }

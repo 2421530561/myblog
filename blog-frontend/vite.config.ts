@@ -15,12 +15,12 @@ export default defineConfig({
     proxy: {
       // 后端 REST 接口
       '/api': {
-        target: 'http://localhost:8080',
+        target: 'http://localhost:8081',
         changeOrigin: true,
       },
       // 上传图片访问（后端虚拟路径映射）
       '/upload': {
-        target: 'http://localhost:8080',
+        target: 'http://localhost:8081',
         changeOrigin: true,
       },
     },

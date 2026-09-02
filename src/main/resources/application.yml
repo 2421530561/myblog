@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8081
 
 spring:
   application:
@@ -9,7 +9,7 @@ spring:
     # 数据库需先创建：blog（执行 resources/db/schema.sql）
     url: jdbc:mysql://localhost:3306/blog?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
     username: root
-    password: root
+    password: 11111111
   # M3 启用 Redis（本地需安装 Redis，或 Docker 起一个）后取消注释
   # data:
   #   redis:
