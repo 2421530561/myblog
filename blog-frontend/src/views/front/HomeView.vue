@@ -7,7 +7,7 @@
         <p class="hero-slogan">{{ appStore.siteConfig.slogan }}</p>
         <div class="hero-actions">
           <n-button type="primary" size="large" @click="router.push('/archive')">浏览归档</n-button>
-          <n-button v-if="userStore.token && userStore.userInfo" size="large" @click="router.push('/admin/articles')">写文章</n-button>
+          <n-button v-if="userStore.token && userStore.userInfo" size="large" @click="router.push('/editor')">写文章</n-button>
         </div>
       </div>
       <div class="hero-decoration">
@@ -44,7 +44,7 @@
         <!-- 空状态 -->
         <n-empty v-else-if="list.length === 0" description="暂无文章" class="empty-state">
           <template #extra>
-            <n-button v-if="userStore.token && userStore.userInfo" type="primary" @click="router.push('/admin/articles')">写第一篇</n-button>
+            <n-button v-if="userStore.token && userStore.userInfo" type="primary" @click="router.push('/editor')">写第一篇</n-button>
           </template>
         </n-empty>
         <!-- 文章列表 -->
@@ -109,7 +109,7 @@
             </n-space>
           </template>
           <n-space vertical>
-            <n-button block size="small" @click="router.push('/admin/articles')">写文章</n-button>
+            <n-button block size="small" @click="router.push('/editor')">写文章</n-button>
             <n-button block size="small" quaternary @click="router.push('/profile')">个人中心</n-button>
           </n-space>
         </n-card>

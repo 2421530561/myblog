@@ -54,6 +54,7 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException("账号已被禁用");
         }
         String inputPwd = DigestUtils.md5DigestAsHex(logindto.getPassword().getBytes(StandardCharsets.UTF_8));
+        System.out.println("========== MD5 DEBUG: inputPwd=" + inputPwd + ", storedPwd=" + user.getPassword() + " ==========");
         if (!inputPwd.equals(user.getPassword())) {
             throw new BusinessException("用户名或密码错误");
         }

@@ -7,7 +7,7 @@
       <n-gi v-for="link in friendLinks" :key="link.name">
         <n-card hoverable class="friend-card" @click="openLink(link.url)">
           <template #header>
-            <n-space align="center" size="12">
+            <n-space align="center" :size="12">
               <n-avatar :src="link.avatar" round :size="40" />
               <div>
                 <div class="friend-name">{{ link.name }}</div>

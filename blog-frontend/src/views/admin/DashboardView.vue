@@ -32,7 +32,7 @@
 
     <n-card title="快速入口" class="mt-4">
       <n-space>
-        <n-button type="primary" @click="router.push('/admin/articles')">写文章</n-button>
+        <n-button type="primary" @click="router.push('/editor')">写文章</n-button>
         <n-button @click="router.push('/admin/categories')">管理分类</n-button>
         <n-button @click="router.push('/admin/tags')">管理标签</n-button>
       </n-space>

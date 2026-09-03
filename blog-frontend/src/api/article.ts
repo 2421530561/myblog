@@ -20,7 +20,9 @@ export interface ArticlePageItem {
   viewCount: number
   likeCount: number
   isTop: number
-  publishTime: string
+  publishTime?: string
+  status?: string
+  rejectReason?: string
 }
 
 export interface ArticleDetail {

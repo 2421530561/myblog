@@ -13,7 +13,7 @@
         </nav>
         <div class="user-area">
           <template v-if="userStore.token">
-            <n-button size="tiny" strong secondary type="primary" @click="router.push('/admin/articles')">写文章</n-button>
+            <n-button size="tiny" strong secondary type="primary" @click="router.push('/editor')">写文章</n-button>
             <router-link to="/profile">个人中心</router-link>
             <a href="javascript:;" @click="handleLogout">退出</a>
           </template>

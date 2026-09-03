@@ -4,7 +4,7 @@
 
     <n-card class="profile-card">
       <template #header>
-        <n-space align="center" size="16">
+        <n-space align="center" :size="16">
           <n-avatar :src="userInfo?.avatar" round :size="64" />
           <div>
             <div class="nickname">{{ userInfo?.nickname || userInfo?.username }}</div>
@@ -34,7 +34,7 @@
             <n-thing :title="item.title">
               <template #description>
                 <n-space size="small">
-                  <n-text depth="3">{{ item.publishTime }}</n-text>
+                  <n-text depth="3">{{ item?.publishTime }}</n-text>
                   <n-tag v-if="item.categoryName" size="tiny">{{ item.categoryName }}</n-tag>
                 </n-space>
               </template>

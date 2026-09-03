@@ -30,6 +30,12 @@ const router = createRouter({
           component: () => import('@/views/front/ProfileView.vue'),
           meta: { requiresAuth: true },
         },
+        {
+          path: 'editor/:id?',
+          name: 'article-editor',
+          component: () => import('@/views/admin/ArticleEditorView.vue'),
+          meta: { requiresAuth: true },
+        },
       ],
     },
     // ===== 后台布局（仅 ADMIN）=====

@@ -6,8 +6,10 @@ export interface UserInfo {
   id: number
   username: string
   nickname: string
+  email: string
   avatar?: string
   role: 'ADMIN' | 'USER'
+  createTime?: string
 }
 
 /**

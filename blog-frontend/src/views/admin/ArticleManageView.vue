@@ -3,7 +3,7 @@
     <n-page-header>
       <template #title>文章管理</template>
       <template #extra>
-        <n-button type="primary" @click="openCreateModal">写文章</n-button>
+        <n-button type="primary" @click="router.push('/editor')">写文章</n-button>
       </template>
     </n-page-header>
 
@@ -94,6 +94,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed, h } from 'vue'
+import { useRouter } from 'vue-router'
 import { useMessage, type DataTableColumn, type FormInst, type FormRules } from 'naive-ui'
 import * as articleApi from '@/api/article'
 import * as categoryApi from '@/api/category'
@@ -102,6 +103,7 @@ import type { ArticlePageItem } from '@/api/article'
 import type { Category } from '@/api/category'
 import type { Tag } from '@/api/tag'
 
+const router = useRouter()
 const message = useMessage()
 const list = ref<ArticlePageItem[]>([])
 const loading = ref(false)
