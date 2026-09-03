@@ -1,5 +1,5 @@
 <template>
-  <n-layout has-sider position="absolute">
+  <n-layout has-sider class="admin-layout">
     <!-- 侧边菜单 -->
     <n-layout-sider bordered collapse-mode="width" :width="200" :collapsed-width="64" show-trigger>
       <div class="admin-logo">后台管理</div>
@@ -17,7 +17,7 @@
       </n-layout-header>
 
       <!-- 内容区 -->
-      <n-layout-content class="admin-content" content-style="padding: 24px;">
+      <n-layout-content class="admin-content">
         <router-view />
       </n-layout-content>
     </n-layout>
@@ -29,6 +29,7 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { MenuOption } from 'naive-ui'
 import { useUserStore } from '@/stores/user'
+import * as authApi from '@/api/auth'
 
 const route = useRoute()
 const router = useRouter()
@@ -52,14 +53,21 @@ function handleMenuSelect(key: string) {
   router.push(key)
 }
 
-function handleLogout() {
-  // TODO M1: 调用后端登出接口后再清除本地态
+async function handleLogout() {
+  try {
+    await authApi.logout()
+  } catch {
+    // 忽略登出接口错误
+  }
   userStore.clear()
   router.push('/login')
 }
 </script>
 
 <style scoped>
+.admin-layout {
+  min-height: 100vh;
+}
 .admin-logo {
   height: 56px;
   line-height: 56px;
@@ -83,6 +91,7 @@ function handleLogout() {
   text-decoration: none;
 }
 .admin-content {
+  padding: 24px;
   min-height: calc(100vh - 56px);
 }
 </style>

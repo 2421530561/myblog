@@ -30,7 +30,6 @@ export const useUserStore = defineStore('user', () => {
   }
 
   async function login(params: authApi.LoginParams) {
-    // TODO M1: 调用后端登录接口，成功后写入 token 与用户信息
     const data = (await authApi.login(params)) as unknown as authApi.LoginResult
     setToken(data.token)
     setUserInfo(data.userInfo)

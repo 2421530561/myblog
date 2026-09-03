@@ -1,5 +1,5 @@
 <template>
-  <n-layout position="absolute">
+  <n-layout class="full-layout">
     <!-- 顶部导航 -->
     <n-layout-header bordered class="header">
       <div class="header-inner">
@@ -7,11 +7,13 @@
         <nav class="nav">
           <router-link to="/">首页</router-link>
           <router-link to="/archive">归档</router-link>
+          <router-link to="/search">搜索</router-link>
           <router-link to="/about">关于</router-link>
           <router-link to="/friends">友链</router-link>
         </nav>
         <div class="user-area">
           <template v-if="userStore.token">
+            <n-button size="tiny" strong secondary type="primary" @click="router.push('/admin/articles')">写文章</n-button>
             <router-link to="/profile">个人中心</router-link>
             <a href="javascript:;" @click="handleLogout">退出</a>
           </template>
@@ -24,7 +26,7 @@
     </n-layout-header>
 
     <!-- 主内容区 -->
-    <n-layout-content class="content" content-style="padding: 24px 16px;">
+    <n-layout-content class="content">
       <router-view />
     </n-layout-content>
 
@@ -39,19 +41,29 @@
 import { useRouter } from 'vue-router'
 import { useAppStore } from '@/stores/app'
 import { useUserStore } from '@/stores/user'
+import * as authApi from '@/api/auth'
 
 const router = useRouter()
 const appStore = useAppStore()
 const userStore = useUserStore()
 
-function handleLogout() {
-  // TODO M1: 调用后端登出接口后再清除本地态
+async function handleLogout() {
+  try {
+    await authApi.logout()
+  } catch {
+    // 忽略登出接口错误
+  }
   userStore.clear()
   router.push('/')
 }
 </script>
 
 <style scoped>
+.full-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 .header-inner {
   max-width: 1080px;
   margin: 0 auto;
@@ -85,14 +97,17 @@ function handleLogout() {
 .user-area {
   display: flex;
   gap: 12px;
+  align-items: center;
 }
 .content {
-  min-height: calc(100vh - 112px);
+  flex: 1;
+  padding: 24px 16px;
 }
 .footer {
   text-align: center;
   padding: 16px 0;
   color: #999;
   font-size: 13px;
+  flex-shrink: 0;
 }
 </style>

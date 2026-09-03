@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { useUserStore } from '@/stores/user'
+import router from '@/router'
 
 /**
  * 统一返回体，与后端 com.blog.common.Result 对应（PRD 7.5）
@@ -39,7 +40,7 @@ request.interceptors.response.use(
       // 登录过期：清除本地登录态并跳转登录页
       const userStore = useUserStore()
       userStore.clear()
-      window.location.href = '/login'
+      router.push('/login')
     }
     return Promise.reject(error)
   },
