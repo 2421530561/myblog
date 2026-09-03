@@ -1,7 +1,13 @@
 package com.littlecase.myblog.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import cn.dev33.satoken.annotation.SaCheckRole;
+import com.littlecase.myblog.common.Result;
+import com.littlecase.myblog.entity.Tag;
+import com.littlecase.myblog.service.TagService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 标签接口（M2 里程碑实现）
@@ -17,6 +23,28 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/tag")
+@RequiredArgsConstructor
 public class TagController {
     // TODO M2: 标签列表 / 标签 CRUD
+    private final TagService tagService;
+    /** 公开：全部标签列表 */
+    @GetMapping("/list")
+    public Result<List<Tag>> list(){
+        return Result.ok(tagService.listAll());
+    }
+    /** 管理员：新增标签 */
+    @PostMapping
+    @SaCheckRole("ADMIN")
+    public Result<Tag> create(@RequestParam String name){
+        return Result.ok(tagService.create(name));
+    }
+        /** 管理员：删除标签 */
+    @DeleteMapping("/{id}")
+    @SaCheckRole("ADMIN")
+    public Result<Void> delete(@PathVariable Long id) {
+        tagService.delete(id);
+        return Result.ok();
+    }
+
+    
 }
