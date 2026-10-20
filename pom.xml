@@ -72,13 +72,40 @@
 			<version>1.39.0</version>
 		</dependency>
 
-		<!-- M3 计数/缓存：Redis -->
-		<!--
+		<!-- M2 文章链路：Markdown → HTML（发布时生成 content_html，PRD 假设 1） -->
+		<dependency>
+			<groupId>org.commonmark</groupId>
+			<artifactId>commonmark</artifactId>
+			<version>0.22.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.commonmark</groupId>
+			<artifactId>commonmark-ext-gfm-tables</artifactId>
+			<version>0.22.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.commonmark</groupId>
+			<artifactId>commonmark-ext-gfm-strikethrough</artifactId>
+			<version>0.22.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.commonmark</groupId>
+			<artifactId>commonmark-ext-task-list-items</artifactId>
+			<version>0.22.0</version>
+		</dependency>
+
+		<!-- M2 安全：入库前对渲染出的 HTML 做二次清洗（PRD 6 安全 - XSS） -->
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.18.3</version>
+		</dependency>
+
+		<!-- M3 互动：阅读量/点赞 Redis 增量 + 定时落库 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
-		-->
 
 		<!-- 接口文档（M4）：
 		<dependency>

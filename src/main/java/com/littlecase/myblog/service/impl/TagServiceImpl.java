@@ -34,6 +34,20 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    public void update(Long id, String name) {
+        Tag tag = tagMapper.selectById(id);
+        if (tag == null) {
+            throw new BusinessException("标签不存在");
+        }
+        if (tagMapper.exists(new LambdaQueryWrapper<Tag>()
+                .eq(Tag::getName, name).ne(Tag::getId, id))) {
+            throw new BusinessException("标签名称已存在");
+        }
+        tag.setName(name);
+        tagMapper.updateById(tag);
+    }
+
+    @Override
     public void delete(Long id)
     {
         tagMapper.deleteById(id);

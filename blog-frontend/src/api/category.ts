@@ -8,17 +8,17 @@ export interface Category {
 }
 
 export function getCategoryList() {
-  return request.get('/category/list')
+  return request.get<never, Category[]>('/category/list')
 }
 
 export function createCategory(name: string, sort?: number) {
-  return request.post('/category', null, { params: { name, sort } })
+  return request.post<never, Category>('/category', { name, sort })
 }
 
 export function updateCategory(id: number, name?: string, sort?: number) {
-  return request.put(`/category/${id}`, null, { params: { name, sort } })
+  return request.put<never, void>(`/category/${id}`, { name, sort })
 }
 
 export function deleteCategory(id: number) {
-  return request.delete(`/category/${id}`)
+  return request.delete<never, void>(`/category/${id}`)
 }

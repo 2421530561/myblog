@@ -14,11 +14,17 @@ spring:
     serialization:
       write-dates-as-timestamps: false
     default-property-inclusion: non_null  
-  # M3 启用 Redis（本地需安装 Redis，或 Docker 起一个）后取消注释
-  # data:
-  #   redis:
-  #     host: localhost
-  #     port: 6379
+  # 图片上传：单文件 ≤5MB（PRD 6 安全），超出由 GlobalExceptionHandler 统一提示
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+  # M3 互动：阅读量/点赞 Redis（本地需安装 Redis，或 Docker 起一个）
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 3000ms
 
 # 自定义配置：图片上传目录（本地磁盘，配合 WebMvcConfig 的虚拟路径映射 /upload/**）
 blog:

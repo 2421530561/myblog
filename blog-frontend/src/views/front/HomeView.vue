@@ -71,6 +71,13 @@
                   <span class="meta-divider">·</span>
                   <span class="meta-item">{{ item.publishTime }}</span>
                   <n-tag v-if="item.categoryName" size="tiny" bordered>{{ item.categoryName }}</n-tag>
+                  <n-tag
+                    v-for="t in item.tags"
+                    :key="t"
+                    size="tiny"
+                    type="info"
+                    :bordered="false"
+                  >{{ t }}</n-tag>
                   <span class="meta-divider">·</span>
                   <span class="meta-item">👁 {{ item.viewCount }}</span>
                   <span class="meta-item">👍 {{ item.likeCount }}</span>

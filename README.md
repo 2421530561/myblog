@@ -3,9 +3,11 @@
 基于 [docs/PRD.md](docs/PRD.md) 搭建的前后端分离个人博客。
 
 - **前端** `blog-frontend/`：Vue 3 + TypeScript + Vite + Naive UI
-- **后端**（本仓库根目录）：Spring Boot 4 + MyBatis-Plus + MySQL 8（Redis 后续里程碑接入）
+- **后端**（本仓库根目录）：Spring Boot 3.4 + MyBatis-Plus + MySQL 8 + Redis（计数缓存）
+- **互动**：评论（楼中楼）、点赞、阅读量（Redis 增量 + 定时落库）
 
-> 当前状态：**M0 项目框架（脚手架）**。接口与业务代码均为占位 / TODO，随学习路线逐步实现。
+> 当前状态：**M3 互动已完成**（M1 认证、M2 文章链路、M3 评论/点赞/阅读量全部跑通）。
+> 验收记录见 [docs/M2-验收报告.md](docs/M2-验收报告.md)、[docs/M3-验收报告.md](docs/M3-验收报告.md)。
 
 ## 目录结构
 
@@ -69,6 +71,19 @@ npm run dev
 
 打开 `http://localhost:5173`，应看到前台页面（首页 / 归档 / 关于 / 友链 + 登录注册入口）。
 
+> Vditor 的运行时资源（`lute.min.js`、highlight.js 等）默认从 CDN 加载，离线会白屏。
+> `npm run dev` / `npm run build` 会先执行 `scripts/sync-vditor.mjs`，把所需资源同步到
+> `public/vditor/dist`（已在 .gitignore 中），编辑器通过 `cdn: '/vditor'` 走本地资源。
+
+### 常见问题
+
+- **`./mvnw` 报 “找不到或无法加载主类 org.codehaus.plexus.classworlds.launcher.Launcher”**
+  Git Bash 下 MSYS 会改写 `-classpath` 参数导致启动失败。设置好 `JAVA_HOME` 后用 IDE 启动，
+  或直接用 `java` 拉起 Maven（参见 docs/M2-验收报告.md 的“本地启动备忘”）。
+- **改了代码但行为没变 / 报 `Unresolved compilation problem`**
+  IDE 的 Java 自动构建会往 `target/classes` 写入半成品 class，Maven 增量编译会因时间戳判定
+  “已最新”而跳过。执行一次 `clean compile` 即可。
+
 ## 学习路线（对应 PRD 第 8 节里程碑）
 
 ### M1 工程与认证
@@ -78,15 +93,29 @@ npm run dev
 - [ ] 登录页 / 注册页真实表单接入（替换占位页）
 
 ### M2 文章链路
-- [ ] article 实体与前台列表 / 详情接口（分页插件已配好）
-- [ ] 分类 / 标签 CRUD
-- [ ] Vditor 编辑器接入 + 图片上传（虚拟路径映射已配好）
-- [ ] 草稿 → 提交审核 → 审核发布 / 驳回状态机
+- [x] article 实体与前台列表 / 详情接口（分页插件已配好）
+- [x] 分类 / 标签 CRUD
+- [x] Vditor 编辑器接入 + 图片上传（虚拟路径映射已配好）
+- [x] 草稿 → 提交审核 → 审核发布 / 驳回状态机
+
+> M2 关键实现说明：
+> - 状态枚举见 `common/ArticleStatus`（0 草稿 / 1 待审核 / 2 已发布 / 3 已驳回），流转规则见 `ArticleServiceImpl`
+> - `content_html` 在**发布时**由 `MarkdownUtil`（commonmark + GFM 表格/删除线）渲染，并经 `HtmlSanitizer`（jsoup 白名单）清洗
+> - Sa-Token 注解鉴权需手动注册 `SaInterceptor`，角色数据源需实现 `StpInterface` —— 见 `config/SaTokenConfig`、`config/StpInterfaceImpl`
+> - 上传的图片落盘到 `./upload/{yyyyMMdd}/{uuid}.ext`，经 `/upload/**` 虚拟路径访问（上传目录已转绝对路径）
 
 ### M3 互动
-- [ ] 评论（登录校验、楼中楼回复）
-- [ ] 点赞（唯一约束防重复 + Redis 计数缓存）
-- [ ] 阅读量（Redis 增量 + 定时落库，启用 Redis 依赖）
+- [x] 评论（登录校验、楼中楼回复、作者/管理员删除、每分钟 5 条限流）
+- [x] 点赞（唯一约束防重复 + Redis 计数缓存 TTL 10 分钟）
+- [x] 阅读量（Redis 增量 + 每 5 分钟定时落库）
+- [x] 前台文章详情页评论区 + 点赞按钮
+
+> M3 关键实现说明：
+> - 阅读量：详情接口只 `INCR blog:view:{id}`，`config/ViewCountSyncTask` 每 5 分钟累加进 `article.view_count` 后删 key；展示值 = DB 存量 + Redis 增量
+> - 点赞：`article_like` 表为唯一事实源（`uk_article_user`），点赞数按 PRD 走 `blog:like:count:{id}` 缓存（TTL 10 分钟，未命中查库回填），Redis 故障自动降级查库
+> - 评论：顶层评论分页（新的在前），回复统一挂在所属顶层评论下展示并带“回复 @某人”；删除时递归逻辑删除全部后代
+> - Redis 不可用时评论/阅读量/点赞均降级，不影响主链路（评论限流放行、阅读量直接写库、点赞数查库）
+> - 本地 Redis 端口 6379；`application.yml` 的 `spring.data.redis` 即连接配置
 
 ### M4 检索与管理
 - [ ] FULLTEXT 全文搜索（手写 Mapper XML，返回高亮字段）

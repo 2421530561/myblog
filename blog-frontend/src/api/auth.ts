@@ -13,19 +13,23 @@ export interface RegisterParams {
   password: string
 }
 
+/** 登录返回：token + 用户信息（与后端 UserVO 对齐） */
 export interface LoginResult {
   token: string
   userInfo: {
     id: number
     username: string
     nickname: string
+    email: string
     avatar?: string
     role: 'ADMIN' | 'USER'
+    status?: number
+    createTime?: string
   }
 }
 
 export function login(data: LoginParams) {
-  return request.post('/auth/login', data)
+  return request.post<never, LoginResult>('/auth/login', data)
 }
 
 export function register(data: RegisterParams) {

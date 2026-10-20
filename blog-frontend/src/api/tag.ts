@@ -7,13 +7,18 @@ export interface Tag {
 }
 
 export function getTagList() {
-  return request.get('/tag/list')
+  return request.get<never, Tag[]>('/tag/list')
 }
 
 export function createTag(name: string) {
-  return request.post('/tag', null, { params: { name } })
+  return request.post<never, Tag>('/tag', { name })
+}
+
+/** 重命名标签（PRD 4.3 标签管理 CRUD） */
+export function updateTag(id: number, name: string) {
+  return request.put<never, void>(`/tag/${id}`, { name })
 }
 
 export function deleteTag(id: number) {
-  return request.delete(`/tag/${id}`)
+  return request.delete<never, void>(`/tag/${id}`)
 }

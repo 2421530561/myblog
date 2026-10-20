@@ -13,7 +13,7 @@
               <n-thing :title="item.title">
                 <template #description>
                   <n-space size="small">
-                    <n-text depth="3">{{ formatDate(item.publishTime) }}</n-text>
+                    <n-text depth="3">{{ formatDate(item.publishTime ?? '') }}</n-text>
                     <n-tag v-if="item.categoryName" size="tiny">{{ item.categoryName }}</n-tag>
                   </n-space>
                 </template>

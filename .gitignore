@@ -29,5 +29,8 @@ Thumbs.db
 # 运行时上传文件（本地图片存储目录）
 upload/
 
+# Vditor 运行时资源（由 blog-frontend/scripts/sync-vditor.mjs 从 node_modules 生成，不入库）
+blog-frontend/public/vditor/
+
 # 日志
 *.log
